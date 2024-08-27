@@ -1,16 +1,14 @@
 package com.jetbrains.workshop
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +32,13 @@ fun App() {
         "Plank",
         "Dumbbells",
         "Jogging",
+        "Push-ups",
+        "Lunges",
+        "Sit-ups",
+        "High knees",
+        "Burpees",
     )
     MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
         Column(
             Modifier.fillMaxSize().verticalScroll(rememberScrollState()).background(Color.White).padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -50,27 +52,38 @@ fun App() {
 }
 
 @Composable
-fun HabitTrackerItem(expenseLabel: String, expenseAmount: Int) {
+fun HabitTrackerItem(habitLabel: String, habitCount: Int) {
+    var labelState by remember { mutableStateOf(habitLabel) }
     Row(
         Modifier.fillMaxWidth()
-            .padding(10.dp)
+            .padding(5.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(Color(0xffefeafa))
-            .padding(10.dp, 5.dp),
+            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
+            .padding(20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(expenseLabel, fontSize = MaterialTheme.typography.h6.fontSize)
-        Spacer(Modifier.weight(1f))
+        TextField(
+            value = labelState,
+            onValueChange = { labelState = it },
+            modifier = Modifier.weight(1f),
+            placeholder = { Text("Label") },
+        )
         CircularButton(onClick = { /*TODO*/ }) { Text("-") }
-        Text(expenseAmount.toString())
+        Text(habitCount.toString())
         CircularButton(onClick = { /*TODO*/ }) { Text("+") }
     }
 
 }
 
-@Composable fun CircularButton(onClick: () -> Unit, content: @Composable () -> Unit) {
-    Button(onClick = onClick, Modifier.size(40.dp), shape = CircleShape, contentPadding = PaddingValues(0.dp)) { content() }
+@Composable
+fun CircularButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+    Button(
+        onClick = onClick,
+        Modifier.size(40.dp),
+        shape = CircleShape,
+        contentPadding = PaddingValues(0.dp)
+    ) { content() }
 }
 
 @Preview
