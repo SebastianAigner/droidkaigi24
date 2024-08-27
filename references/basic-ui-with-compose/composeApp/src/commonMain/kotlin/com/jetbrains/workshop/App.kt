@@ -54,6 +54,7 @@ fun App() {
 @Composable
 fun HabitTrackerItem(habitLabel: String, habitCount: Int) {
     var labelState by remember { mutableStateOf(habitLabel) }
+    var habitCountState by remember { mutableStateOf(habitCount) }
     Row(
         Modifier.fillMaxWidth()
             .padding(5.dp)
@@ -69,9 +70,9 @@ fun HabitTrackerItem(habitLabel: String, habitCount: Int) {
             modifier = Modifier.weight(1f),
             placeholder = { Text("Label") },
         )
-        CircularButton(onClick = { /*TODO*/ }) { Text("-") }
-        Text(habitCount.toString())
-        CircularButton(onClick = { /*TODO*/ }) { Text("+") }
+        CircularButton(onClick = { habitCountState-- }) { Text("-") }
+        Text(habitCountState.toString())
+        CircularButton(onClick = { habitCountState++ }) { Text("+") }
     }
 
 }
