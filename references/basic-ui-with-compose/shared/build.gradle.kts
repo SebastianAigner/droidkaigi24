@@ -45,20 +45,8 @@ kotlin {
     }
     
     sourceSets {
-        androidMain {
-            dependencies {}
-        }
-        commonMain {
-            dependencies {}
-        }
-        iosMain {
-            dependencies {}
-        }
-        jvmMain {
-            dependencies {}
-        }
-        wasmJsMain {
-            dependencies {}
+        commonMain.dependencies {
+            // put your Multiplatform dependencies here
         }
     }
 }

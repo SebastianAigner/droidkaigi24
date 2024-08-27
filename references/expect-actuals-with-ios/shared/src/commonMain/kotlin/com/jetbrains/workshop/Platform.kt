@@ -1,7 +1,13 @@
 package com.jetbrains.workshop
 
-interface Platform {
-    val name: String
+import kotlin.coroutines.coroutineContext
+
+fun goof() {
+    val b = goof()
 }
 
-expect fun getPlatform(): Platform
+fun stdlib() {
+
+}
+
+expect fun getPlatform(): String
