@@ -77,15 +77,13 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.fillMaxWidth().padding(5.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp)
+                .heightIn(max = 100.dp),
         ) {
             for (category in uiState.categories) {
-                Button(
-                    onClick = { onSelectCategory(category) },
-                    modifier = Modifier.aspectRatio(1.0f).weight(1.0f)
-                ) {
-                    Text(category)
-                }
+                RectButton(Modifier.weight(1f), onSelectCategory, category)
             }
         }
 
@@ -101,6 +99,16 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun RectButton(modifier: Modifier, onClick: (String) -> Unit, label: String) {
+    Button(
+        onClick = { onClick(label) },
+        modifier = modifier.size(200.dp, 100.dp)
+    ) {
+        Text(label)
     }
 }
 
