@@ -28,26 +28,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 
-// todo: rip out the network logic into a separate module!
-// todo: make sure wasm client works!
-
-@Composable
-fun BirdAppTheme(
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colors = MaterialTheme.colors.copy(primary = Color.Black),
-        shapes = MaterialTheme.shapes.copy(
-            small = RoundedCornerShape(0.dp),
-            medium = RoundedCornerShape(0.dp),
-            large = RoundedCornerShape(0.dp)
-        )
-    ) {
-        content()
-    }
-}
-
-
 @Composable
 fun App() {
     BirdAppTheme {
