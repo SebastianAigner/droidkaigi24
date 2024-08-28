@@ -52,6 +52,8 @@ kotlin {
             
         }
         commonMain.dependencies {
+            implementation(projects.shared)
+            
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -60,7 +62,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
+            
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)

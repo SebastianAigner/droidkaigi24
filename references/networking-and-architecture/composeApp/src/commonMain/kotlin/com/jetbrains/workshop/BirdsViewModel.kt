@@ -1,12 +1,8 @@
 package com.jetbrains.workshop
 
+import BirdRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -24,15 +20,11 @@ class BirdsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(BirdsUiState(emptyList()))
     val uiState = _uiState.asStateFlow()
 
-    private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json()
-        }
-    }
+    private val birdsRepo = BirdRepository()
 
     fun updateImages() {
         viewModelScope.launch {
-            val images = getImages()
+            val images = birdsRepo.getImages()
             _uiState.update {
                 it.copy(images = images)
             }
@@ -50,11 +42,6 @@ class BirdsViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        httpClient.close()
+        birdsRepo.close()
     }
-
-    private suspend fun getImages(): List<BirdImage> =
-        httpClient
-            .get("https://sebi.io/demo-image-api/pictures.json")
-            .body<List<BirdImage>>()
 }
