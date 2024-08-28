@@ -1,6 +1,7 @@
 package com.jetbrains.workshop
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -26,14 +27,19 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import coil3.compose.AsyncImage
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object HomeRoute
 
 @Composable
 fun App() {
     BirdAppTheme {
         val navController = rememberNavController()
-        NavHost(navController, startDestination = "home") {
-            composable(route = "home") {
+        NavHost(navController, startDestination = HomeRoute) {
+            composable<HomeRoute> {
                 val birdsViewModel = viewModel(BirdsViewModel::class, factory = viewModelFactory {
                     initializer { BirdsViewModel() }
                 })
@@ -42,14 +48,22 @@ fun App() {
                 LaunchedEffect(birdsViewModel) {
                     birdsViewModel.updateImages()
                 }
-                BirdsPage(uiState, { birdsViewModel.selectCategory(it) })
+                BirdsPage(
+                    uiState = uiState,
+                    onSelectCategory = { birdsViewModel.selectCategory(it) },
+                    onSelectImage = { navController.navigate(it) }
+                )
+            }
+            composable<BirdImage> {
+                val thing = it.toRoute<BirdImage>()
+                DetailPage(thing, { navController.popBackStack() })
             }
         }
     }
 }
 
 @Composable
-fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
+fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit, onSelectImage: (BirdImage) -> Unit = {}) {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -63,7 +77,7 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
                 .heightIn(max = 100.dp),
         ) {
             for (category in uiState.categories) {
-                RectButton(Modifier.weight(1f), onSelectCategory, category)
+                RectButton(onSelectCategory, category, Modifier.weight(1f))
             }
         }
 
@@ -75,7 +89,7 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
                 modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
             ) {
                 items(uiState.selectedImages) { image ->
-                    BirdImageCell(image)
+                    BirdImageCell(image, modifier = Modifier.clickable { onSelectImage(image) })
                 }
             }
         }
@@ -83,7 +97,7 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit) {
 }
 
 @Composable
-private fun RectButton(modifier: Modifier, onClick: (String) -> Unit, label: String) {
+private fun RectButton(onClick: (String) -> Unit, label: String, modifier: Modifier) {
     Button(
         onClick = { onClick(label) },
         modifier = modifier.size(200.dp, 100.dp)
@@ -93,11 +107,11 @@ private fun RectButton(modifier: Modifier, onClick: (String) -> Unit, label: Str
 }
 
 @Composable
-fun BirdImageCell(image: BirdImage) {
+fun BirdImageCell(image: BirdImage, modifier: Modifier = Modifier) {
     AsyncImage(
         "https://sebi.io/demo-image-api/${image.path}",
         contentDescription = "${image.category} by ${image.author}",
         contentScale = ContentScale.Crop,
-        modifier = Modifier.aspectRatio(1.0f).fillMaxWidth()
+        modifier = modifier.aspectRatio(1.0f).fillMaxWidth()
     )
 }
