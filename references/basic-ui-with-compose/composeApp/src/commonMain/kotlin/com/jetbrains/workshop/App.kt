@@ -15,12 +15,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import kotlinproject.composeapp.generated.resources.*
+import kotlinproject.composeapp.generated.resources.Res
+import kotlinproject.composeapp.generated.resources.app_name
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.compose_multiplatform
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @Preview
@@ -39,13 +42,22 @@ fun App() {
         "Burpees",
     )
     MaterialTheme {
-        Column(
-            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).background(Color.White).padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text("Habit Tracker", fontSize = MaterialTheme.typography.h4.fontSize)
-            for (exercise in exercises) {
-                HabitTrackerItem(exercise, 10)
+        Box(Modifier.fillMaxSize().background(Color.White)) {
+            Image(
+                painterResource(Res.drawable.bliss),
+                contentDescription = "background",
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                alpha = 0.2f
+            )
+            Column(
+                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(stringResource(Res.string.app_name), fontSize = MaterialTheme.typography.h4.fontSize)
+                for (exercise in exercises) {
+                    HabitTrackerItem(exercise, 10)
+                }
             }
         }
     }
@@ -74,7 +86,6 @@ fun HabitTrackerItem(habitLabel: String, habitCount: Int) {
         Text(habitCountState.toString())
         CircularButton(onClick = { habitCountState++ }) { Text("+") }
     }
-
 }
 
 @Composable
