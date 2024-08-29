@@ -8,12 +8,17 @@
                     "compose"
                 ]
             },
-            "ios": {
+            "desktop": {
+                "ui": [
+                    "compose"
+                ]
+            },
+            "web": {
                 "ui": [
                     "compose"
                 ]
             }
         }
     },
-    "timestamp": "2024-08-27T04:30:07.440633463Z"
+    "timestamp": "2024-08-29T01:17:48.571679674Z"
 }
