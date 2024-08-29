@@ -16,12 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 
-fun beef() {
-val coroutineScope = CoroutineScope(Job())
-coroutineScope.launch {
-    ensureActive()
-}
-}
+
 @Composable
 @Preview
 fun App() {
