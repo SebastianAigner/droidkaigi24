@@ -40,9 +40,7 @@ fun App() {
         val navController = rememberNavController()
         NavHost(navController, startDestination = HomeRoute) {
             composable<HomeRoute> {
-                val birdsViewModel = viewModel(BirdsViewModel::class, factory = viewModelFactory {
-                    initializer { BirdsViewModel() }
-                })
+                val birdsViewModel = viewModel { BirdsViewModel() }
 
                 val uiState by birdsViewModel.uiState.collectAsState()
                 LaunchedEffect(birdsViewModel) {
