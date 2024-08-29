@@ -2,10 +2,6 @@ package com.jetbrains.workshop
 
 import android.os.Build
 
-class AndroidPlatform : Platform {
-    override val name: String = "Android ${Build.VERSION.SDK_INT}"
-}
-
 actual fun getPlatform(): String {
     return "Android ${Build.VERSION.SDK_INT}"
 }

@@ -1,22 +1,23 @@
 import com.jetbrains.workshop.BirdImage
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.serialization.kotlinx.json.json
 
 class BirdRepository {
+    // TODO: Get a list of images from this endpoint: "https://sebi.io/demo-image-api/pictures.json"
     suspend fun getImages(): List<BirdImage> =
         httpClient
             .get("https://sebi.io/demo-image-api/pictures.json")
             .body<List<BirdImage>>()
 
 
-    private val httpClient = HttpClient {
-        install(ContentNegotiation) {
-            json()
-        }
+val httpClient = HttpClient {
+    install(ContentNegotiation) {
+        json()
     }
+}
 
     fun close() {
         httpClient.close()

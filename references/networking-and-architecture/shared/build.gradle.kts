@@ -33,7 +33,7 @@ kotlin {
     }
 
     jvm()
-    
+
     sourceSets {
         androidMain {
             dependencies {
@@ -55,7 +55,7 @@ kotlin {
         }
         wasmJsMain {
             dependencies {
-                
+
             }
         }
     }

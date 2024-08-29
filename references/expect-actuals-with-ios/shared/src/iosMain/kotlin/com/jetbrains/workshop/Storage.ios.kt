@@ -9,3 +9,4 @@ actual fun persistString(key: String, value: String) {
 actual fun restoreString(key: String): String {
     return NSUserDefaults.standardUserDefaults.stringForKey(key) ?: ""
 }
+

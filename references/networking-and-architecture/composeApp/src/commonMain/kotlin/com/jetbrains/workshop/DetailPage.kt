@@ -18,7 +18,8 @@ fun DetailPage(image: BirdImage, onBack: () -> Unit) {
     Box(Modifier.fillMaxSize().padding(16.dp)) {
         BirdImageCell(image, Modifier.fillMaxSize())
         Card(Modifier.align(Alignment.BottomCenter)) {
-            Text("${image.category} by ${image.author}",
+            Text(
+                "${image.category} by ${image.author}",
                 modifier = Modifier.padding(16.dp)
             )
         }
