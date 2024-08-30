@@ -1,33 +1,19 @@
 package com.jetbrains.workshop
 
+import BirdRepository
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import coil3.compose.AsyncImage
 import kotlinx.serialization.Serializable
 
@@ -37,25 +23,17 @@ data object HomeRoute
 @Composable
 fun App() {
     BirdAppTheme {
-        val navController = rememberNavController()
-        NavHost(navController, startDestination = HomeRoute) {
-            composable<HomeRoute> {
-                val birdsViewModel = viewModel { BirdsViewModel() }
-
-                val uiState by birdsViewModel.uiState.collectAsState()
-                LaunchedEffect(birdsViewModel) {
-                    birdsViewModel.updateImages()
-                }
-                BirdsPage(
-                    uiState = uiState,
-                    onSelectCategory = { birdsViewModel.selectCategory(it) },
-                    onSelectImage = { navController.navigate(it) }
-                )
-            }
-            composable<BirdImage> {
-                val thing = it.toRoute<BirdImage>()
-                DetailPage(thing, { navController.popBackStack() })
-            }
+        var birdImages by remember { mutableStateOf(emptyList<BirdImage>()) }
+        LaunchedEffect(Unit) {
+            birdImages = BirdRepository().getImages()
+        }
+        BirdsPage(
+            uiState = BirdsUiState(birdImages, selectedCategory = null),
+            onSelectCategory = { },
+            onSelectImage = { }
+        )
+        if(birdImages.isEmpty()) {
+            Text("No birds...")
         }
     }
 }
@@ -79,15 +57,21 @@ fun BirdsPage(uiState: BirdsUiState, onSelectCategory: (String) -> Unit, onSelec
             }
         }
 
-        AnimatedVisibility(visible = uiState.selectedImages.isNotEmpty()) {
+        AnimatedVisibility(visible = true) {
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(180.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 modifier = Modifier.fillMaxSize().padding(horizontal = 5.dp),
             ) {
-                items(uiState.selectedImages) { image ->
-                    BirdImageCell(image, modifier = Modifier.clickable { onSelectImage(image) })
+                if (uiState.selectedCategory == null) {
+                    items(uiState.images) { image ->
+                        BirdImageCell(image, modifier = Modifier.clickable { onSelectImage(image) })
+                    }
+                } else {
+                    items(uiState.selectedImages) { image ->
+                        BirdImageCell(image, modifier = Modifier.clickable { onSelectImage(image) })
+                    }
                 }
             }
         }

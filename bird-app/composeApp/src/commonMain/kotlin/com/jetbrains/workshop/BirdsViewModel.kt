@@ -15,33 +15,3 @@ data class BirdsUiState(
     val categories = images.map { it.category }.toSet()
     val selectedImages = images.filter { it.category == selectedCategory }
 }
-
-class BirdsViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(BirdsUiState(emptyList()))
-    val uiState = _uiState.asStateFlow()
-
-    private val birdsRepo = BirdRepository()
-
-    fun updateImages() {
-        viewModelScope.launch {
-            val images = birdsRepo.getImages()
-            _uiState.update {
-                it.copy(images = images)
-            }
-        }
-    }
-
-    fun selectCategory(category: String) {
-        _uiState.update { state ->
-            if (state.selectedCategory == category) {
-                state.copy(selectedCategory = null)
-            } else {
-                state.copy(selectedCategory = category)
-            }
-        }
-    }
-
-    override fun onCleared() {
-        birdsRepo.close()
-    }
-}
