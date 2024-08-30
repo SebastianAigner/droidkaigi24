@@ -43,71 +43,25 @@ fun App() {
     )
     MaterialTheme {
         Box(Modifier.fillMaxSize().background(Color.White)) {
-            Image(
-                painterResource(Res.drawable.bliss),
-                contentDescription = "background",
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-                alpha = 0.2f
-            )
-            Column(
-                Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(stringResource(Res.string.app_name), fontSize = MaterialTheme.typography.h4.fontSize)
-                for (exercise in exercises) {
-                    HabitTrackerItem(exercise, 10)
-                }
-            }
+            
         }
     }
 }
 
 @Composable
-fun HabitTrackerItem(habitLabel: String, habitCount: Int) {
-    var labelState by remember { mutableStateOf(habitLabel) }
-    var habitCountState by remember { mutableStateOf(habitCount) }
-    Row(
-        Modifier.fillMaxWidth()
-            .padding(5.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .border(1.dp, Color.Gray, RoundedCornerShape(10.dp))
-            .padding(20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        TextField(
-            value = labelState,
-            onValueChange = { labelState = it },
-            modifier = Modifier.weight(1f),
-            placeholder = { Text("Label") },
-        )
-        CircularButton(onClick = { habitCountState-- }) { Text("-") }
-        Text(habitCountState.toString())
-        CircularButton(onClick = { habitCountState++ }) { Text("+") }
+fun MyElement(label: String) {
+    Column {
+        Text(label)
+        Text(label)
+        Text(label)
     }
-}
-
-@Composable
-fun CircularButton(onClick: () -> Unit, content: @Composable () -> Unit) {
-    Button(
-        onClick = onClick,
-        Modifier.size(40.dp),
-        shape = CircleShape,
-        contentPadding = PaddingValues(0.dp)
-    ) { content() }
 }
 
 @Preview
 @Composable
-fun HabitTrackerItemView() {
-    HabitTrackerItem(
-        "Pull-ups",
-        10
-    )
+fun MyElementPreview() {
+    MyElement("Hello")
 }
-
-
 
 
 
