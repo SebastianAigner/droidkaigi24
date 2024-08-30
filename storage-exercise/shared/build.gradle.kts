@@ -23,35 +23,21 @@ kotlin {
             }
         }
     }
-    
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     jvm()
-    
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "Shared"
-            isStatic = true
-        }
-    }
-    
+
     sourceSets {
         androidMain {
             dependencies {}
         }
         commonMain {
-            dependencies {}
-        }
-        iosMain {
             dependencies {}
         }
         jvmMain {
